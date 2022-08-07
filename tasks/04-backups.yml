@@ -1,0 +1,29 @@
+- name: Create Scripting Directory
+  file:
+    path: /opt/paper/scr/
+    state: directory
+    owner: minecraft
+    group: minecraft
+
+- name: Create Backup Directory
+  file:
+    path: /opt/paper/backup/
+    state: directory
+    owner: minecraft
+    group: minecraft
+
+- name: Prepare Backup Script
+  template:
+    src: minecraft_backup.sh.j2
+    dest: /opt/paper/scr/minecraft_backup_{{ mc_world_name }}.sh
+    owner: minecraft
+    group: minecraft
+    mode: "700"
+
+- name: Crontab job for backup
+  ansible.builtin.cron:
+    name: "Backup {{ mc_world_name }}"
+    user: minecraft
+    minute: "45"
+    hour: "05"
+    job: "/opt/paper/scr/minecraft_backup_{{ mc_world_name }}.sh"

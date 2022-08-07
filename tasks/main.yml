@@ -34,3 +34,6 @@
 
 - name: Install Various Plugins
   include: 03-plugins.yml
+
+- name: Setup Backups
+  include: 04-backups.yml

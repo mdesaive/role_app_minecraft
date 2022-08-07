@@ -1,0 +1,23 @@
+#!/bin/bash
+game_path="/opt/paper/{{ mc_world_name }}/"
+backup_path="/opt/paper/backup/"
+tmux_session="mc"
+folder_name="backup-{{ mc_world_name }}-$(date +%Y%m%d_%H%M-%S)"
+
+screen -R mc-{{ mc_world_name }} -X stuff "say Performing backup $(printf '\r')"
+screen -R mc-{{ mc_world_name }} -X stuff "save-off $(printf '\r')"
+screen -R mc-{{ mc_world_name }} -X stuff "save-all $(printf '\r')"
+sleep 5
+echo "Copying the files..."
+tar -cz $game_path/{{ mc_world_name }}* -f  $backup_path/$folder_name.tgz
+
+# echo "Removing the old backups..."
+# if [ $(ls $backup_path | wc -l) -gt 10 ]
+# then
+#           echo "Remove 1 oldest backup..."
+#                   rm "$backup_path/$(ls $backup_path -t | tail -1)" -rf
+# fi
+
+sleep 5
+screen -R mc-{{ mc_world_name }} -X stuff "save-on $(printf '\r')"
+screen -R mc-{{ mc_world_name }} -X stuff "say Backup complete. $(printf '\r')"
