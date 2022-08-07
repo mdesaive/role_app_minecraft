@@ -1,0 +1,8 @@
+- name: Place various plugin files
+  copy:
+    src: "{{ item.value }}"
+    dest: "/opt/paper/{{ mc_world_name }}/plugins/{{ item.key }}"
+    owner: minecraft
+    group: minecraft
+  notify: Restart Minecraft
+  loop: "{{ mc_plugins | dict2items }}"

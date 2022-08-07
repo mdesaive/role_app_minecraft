@@ -1,2 +1,36 @@
 ---
 # tasks file for role_app_minecraft
+
+- debug:
+    var: mc_version
+
+- name: gather os specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "mc-{{ mc_version }}/{{ ansible_distribution }}-{{ ansible_distribution_version}}.yml" # For OpenSuSE Leap ansible_distribution_major_version is NA
+    - "mc-{{ mc_verstion}}/{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+    - "mc-{{ mc_verstion}}/{{ ansible_distribution }}.yml"
+  tags:
+    - always
+
+- name: Include os independent variables.
+  include_vars: "vars/main.yml"
+
+- name: Display all variables/facts known for a host
+  debug:
+    var: hostvars[inventory_hostname]
+  tags: debug_info
+
+# - name: Display all variables/facts known for a host
+#   debug:
+#     var: hostvars[inventory_hostname]
+#     verbosity: 4
+
+- name: Install Minecraft
+  include: 01-minecraft.yml
+
+- name: Install Geyser Plugin
+  include: 02-geyser.yml
+
+- name: Install Various Plugins
+  include: 03-plugins.yml

@@ -1,0 +1,15 @@
+- name: Place geyser plugin file
+  copy:
+    src: "{{ mc_geyser_file }}"
+    dest: "/opt/paper/{{ mc_world_name }}/plugins/Geyser-Spigot.jar"
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"
+
+- name: Write Geyser configuration
+  template:
+    src: Geyser-Spigot-config.yml.j2
+    dest: "/opt/paper/{{ mc_world_name }}/plugins/Geyser-Spigot/config.yml"
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"

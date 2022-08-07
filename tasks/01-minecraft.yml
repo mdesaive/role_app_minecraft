@@ -1,0 +1,75 @@
+- name: Install Java
+  package:
+    name: "{{ mc_java_package }}"
+    state: present
+
+- name: Add group minecraft.
+  group:
+    name: minecraft
+    state: present
+
+- name: Add user minecraft.
+  user:
+    name: minecraft
+    shell: /bin/bash
+    home: /opt/paper
+    group: minecraft
+
+- name: Prepare working directory for paperspigot
+  file:
+    path: /opt/paper/{{ mc_world_name }}
+    state: directory
+    owner: minecraft
+    group: minecraft
+    mode: '755'
+
+- name: Place paper.jar.
+  copy:
+    src: "{{ mc_paperspigot_file }}"
+    dest: /opt/paper/{{ mc_world_name }}/paper.jar
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"
+
+- name: Accept EULA
+  copy:
+    src: eula.txt
+    dest: /opt/paper/{{ mc_world_name }}/eula.txt
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"
+
+- name: Prepare paper.yml
+  copy:
+    src: paper.yml
+    dest: /opt/paper/{{ mc_world_name }}/paper.yml
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"
+
+- name: Prepare server.properties
+  template:
+    src: server.properties.j2
+    dest: /opt/paper/{{ mc_world_name }}/server.properties
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"
+
+- name: Prepare systemd unit file
+  copy:
+    src: minecraft.service
+    dest: /etc/systemd/system/minecraft@.service
+    owner: root
+    group: root
+    mode: '644'
+  notify: "Restart Minecraft"
+
+- name: Activate new systemd file
+  systemd:
+    daemon_reload: yes
+
+- name: Start and enable minecraft service
+  service:
+    name: minecraft@{{ mc_world_name }}
+    state: started
+    enabled: yes

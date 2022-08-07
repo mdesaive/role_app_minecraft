@@ -1,2 +1,7 @@
 ---
 # handlers file for role_app_minecraft
+
+- name: Restart Minecraft
+  ansible.builtin.service:
+    name: minecraft@{{ mc_world_name }}
+    state: restarted
