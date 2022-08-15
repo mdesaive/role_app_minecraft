@@ -1,7 +1,11 @@
 mc_paperspigot_file: paper-1.19.2-125.jar
-mc_geyser_file: Geyser-Spigot-Build-1175-2022-08-13.jar
+# Using an older Geyser version to allow 1.18 Bedrock clients
+mc_geyser_file: Geyser-Spigot-Build-1105-2022-05-30.jar
+# mc_geyser_file: Geyser-Spigot-Build-1175-2022-08-13.jar
 mc_plugins:
-    floodgate-spigot.jar: floodgate-spigot-Build-073-2022-08-10.jar
+    # Using an older floodgate to be compatible with Geyser for 1.18
+    floodgate-spigot.jar: floodgate-spigot-Build-066-2022-06-08.jar
+    # floodgate-spigot.jar: floodgate-spigot-Build-073-2022-08-10.jar
     SkinsRestorer.jar: SkinsRestorer-14.2.3-2022-08-06.jar
     ViaBackwards.jar: ViaBackwards-4.4.1-2022-07-28.jar
     ViaVersion.jar: ViaVersion-4.4.1-2022-07-28.jar

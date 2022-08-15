@@ -1,3 +1,4 @@
 ---
 # defaults file for role_app_minecraft
 mc-version: 1.19
+mc_secure_profile: True
