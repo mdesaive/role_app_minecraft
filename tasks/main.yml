@@ -13,10 +13,15 @@
   tags:
     - always
 
-- name: gather variables for Minecraft versin
+- name: gather variables for Minecraft version
   include_vars: "{{ item }}"
   with_first_found:
     - "mc-{{ mc_version }}.yml"
+
+- name: gather variables for Geyser version
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "geyser-{{ mc_geyser_version }}.yml"
 
 - name: Include os independent variables.
   include_vars: "vars/main.yml"

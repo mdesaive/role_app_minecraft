@@ -1,7 +1,5 @@
 mc_paperspigot_file: paper-1.18.2-387-2022-07-03.jar
-mc_geyser_file: Geyser-Spigot-Build-1105-2022-05-30.jar
 mc_plugins:
-    floodgate-spigot.jar: floodgate-spigot-Build-066-2022-06-08.jar
     SkinsRestorer.jar: SkinsRestorer-14.2.1-2022-06-20.jar
     ViaBackwards.jar: ViaBackwards-4.3.0-2022-06-07.jar
     ViaVersion.jar: ViaVersion-4.3.1-2022-06-07.jar
