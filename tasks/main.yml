@@ -18,11 +18,6 @@
   with_first_found:
     - "mc-{{ mc_version }}.yml"
 
-- name: gather variables for Geyser version
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "geyser-{{ mc_geyser_version }}.yml"
-
 - name: Include os independent variables.
   include_vars: "vars/main.yml"
 
@@ -38,9 +33,6 @@
 
 - name: Install Minecraft
   include: 01-minecraft.yml
-
-- name: Install Geyser Plugin
-  include: 02-geyser.yml
 
 - name: Install Various Plugins
   include: 03-plugins.yml

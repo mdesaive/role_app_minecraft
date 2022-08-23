@@ -5,4 +5,5 @@ mc_plugins:
     ViaVersion.jar: ViaVersion-4.4.1-2022-07-28.jar
     Chunky.jar: Chunky-1.2.217-2022-06-26.jar
     Dynmap.jar: Dynmap-3.4-beta-5-spigot-20220725.jar
+    floodgate-spigot.jar: floodgate-spigot-Build-073-2022-08-10.jar
 

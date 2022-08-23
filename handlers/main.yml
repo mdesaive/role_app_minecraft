@@ -3,5 +3,5 @@
 
 - name: Restart Minecraft
   ansible.builtin.service:
-    name: minecraft@{{ mc_world_name }}
+    name: minecraft
     state: restarted
