@@ -55,6 +55,14 @@
     group: minecraft
   notify: "Restart Minecraft"
 
+- name: Install bukkit.yml
+  copy:
+    src: bukkit.yml
+    dest: /opt/paper/run/bukkit.yml
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"
+
 - name: Prepare systemd unit file
   template:
     src: minecraft.service.j2
