@@ -63,6 +63,14 @@
     group: minecraft
   notify: "Restart Minecraft"
 
+- name: Install spigot.yml
+  copy:
+    src: spigot.yml
+    dest: /opt/paper/run/spigot.yml
+    owner: minecraft
+    group: minecraft
+  notify: "Restart Minecraft"
+
 - name: Prepare systemd unit file
   template:
     src: minecraft.service.j2
