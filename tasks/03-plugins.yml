@@ -1,3 +1,21 @@
+
+- name: Prepare plugin directory
+  file:
+    path: /opt/paper/run/plugins/
+    state: directory
+    owner: minecraft
+    group: minecraft
+    mode: '755'
+
+
+- name: Prepare floodgate plugin directory
+  file:
+    path: /opt/paper/run/plugins/floodgate/
+    state: directory
+    owner: minecraft
+    group: minecraft
+    mode: '755'
+
 - name: Place various plugin files
   copy:
     src: "{{ item.value }}"
