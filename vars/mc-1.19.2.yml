@@ -1,9 +1,9 @@
-mc_paperspigot_file: paper-1.19.2-125.jar
+mc_paperspigot_file: paper-1.19.2-132.jar
 mc_plugins:
     SkinsRestorer.jar: SkinsRestorer-14.2.3-2022-08-06.jar
-    ViaBackwards.jar: ViaBackwards-4.4.1-2022-07-28.jar
-    ViaVersion.jar: ViaVersion-4.4.1-2022-07-28.jar
+    ViaBackwards.jar: ViaBackwards-4.4.2-2022-08-02.jar
+    ViaVersion.jar: ViaVersion-4.4.2-2022-08-21.jar
     Chunky.jar: Chunky-1.2.217-2022-06-26.jar
-    Dynmap.jar: Dynmap-3.4-beta-5-spigot-20220725.jar
+    Dynmap.jar: Dynmap-3.4-spigot-2022-08-14.jar
     floodgate-spigot.jar: floodgate-spigot-Build-073-2022-08-10.jar
 
