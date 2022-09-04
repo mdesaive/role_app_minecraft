@@ -1,0 +1,11 @@
+#!/bin/bash
+
+local_backup_dir=/opt/paper/backup
+external_backup_dir_base=/opt/external_backups 
+external_backup_dir_path="Userstore/Minecraft King/Minecraft Backups" 
+backup_filename_base="{{ mc_world_name }}"
+
+mv "$external_backup_dir_base/$external_backup_dir_path/${backup_filename_base}_latest.tgz" "$external_backup_dir_base/$external_backup_dir_path/${backup_filename_base}_old.tgz"
+cp "$local_backup_dir/$(ls -tr $local_backup_dir | tail -n 1 )" "$external_backup_dir_base/$external_backup_dir_path/${backup_filename_base}_latest.tgz"
+sleep 30
+sync ${external_backup_dir_base}

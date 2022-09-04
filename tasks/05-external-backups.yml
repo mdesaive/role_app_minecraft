@@ -24,7 +24,24 @@
     fstype: "{{ mc_extbkp_fstype }}"
     opts: uid=root,gid=minecraft,dir_mode=770
 
-- name: Create /etc/motd about Backups
-  copy:
-    src: motd
-    dest: /etc/motd
+- name: Prepare Backup Script
+  template:
+    src: backup_store_externally.sh.j2
+    dest: /opt/paper/scr/backup_store_externally.sh
+    owner: minecraft
+    group: minecraft
+    mode: "700"
+
+- name: Crontab job push backup externally
+  ansible.builtin.cron:
+    name: "Push Backup External {{ mc_world_name }}"
+    user: minecraft
+    minute: "15"
+    hour: "06"
+    weekday: "{{ mc_backup_push_weekday }}"
+    job: "/opt/paper/scr/backup_store_externally.sh"
+
+    # - name: Create /etc/motd about Backups
+    #   copy:
+    #     src: motd
+    #     dest: /etc/motd
