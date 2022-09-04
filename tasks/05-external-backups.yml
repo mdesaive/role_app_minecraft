@@ -1,0 +1,30 @@
+- name: Install Webdav Package to mount external storage
+  package:
+    name: "{{ mc_webdav_package }}"
+    state: present
+
+- name: Create Directory to Mount External Storage
+  file:
+    path: /opt/external_backups
+    state: directory
+    owner: minecraft
+    group: minecraft
+    mode: '0777'
+
+- name: Create Webdav Secrets File
+  template:
+    src: davfs2_secrets.j2
+    dest: /etc/davfs2/secrets
+
+- name: Mount External Davfs Storage
+  mount:
+    src: "{{ mc_extbkp_source }}"
+    path: "{{ mc_extbkp_mount }}"
+    state: mounted
+    fstype: "{{ mc_extbkp_fstype }}"
+    opts: uid=root,gid=minecraft,dir_mode=770
+
+- name: Create /etc/motd about Backups
+  copy:
+    src: motd
+    dest: /etc/motd

@@ -1,0 +1,4 @@
+To sync minecraft backups to MBO cloud storage:
+sudo ls -ltrh /opt/paper/backup/ | tail -n 3
+sudo cp /opt/paper/backup/<some file>.tgz /opt/external_backups/Userstore/Minecraft\ King/Minecraft\ Backups/
+
