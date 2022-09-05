@@ -6,8 +6,12 @@ external_backup_dir_path="Userstore/Minecraft King/Minecraft Backups"
 mc_world_name="{{ mc_world_name }}"
 
 cd "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
-# <----- remove!! # rm "backup-${mc_world_name}_old"* "${mc_world_name}_old"* 
-for latest_file in $( ls "backup-${mc_world_name}_latest"* "${mc_world_name}_latest"*) ; do
+# <----- remove!! # rm "backup-${mc_world_name}_old"* "${mc_world_name}_older."* 
+for old_file in $( ls "backup-${mc_world_name}_old."* "${mc_world_name}_old."*) ; do
+	echo mv "$latest_file" $( echo $latest_file | sed --expression s/old/older/ )
+  done
+
+for latest_file in $( ls "backup-${mc_world_name}_latest."* "${mc_world_name}_latest."*) ; do
 	echo mv "$latest_file" $( echo $latest_file | sed --expression s/latest/old/ )
   done
 
