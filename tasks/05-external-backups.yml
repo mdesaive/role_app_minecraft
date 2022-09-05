@@ -32,6 +32,14 @@
     group: minecraft
     mode: "700"
 
+- name: Prepare Backup Script for large files
+  template:
+    src: backup_store_externally_chunks.sh.j2
+    dest: /opt/paper/scr/backup_store_externally_chunks.sh
+    owner: minecraft
+    group: minecraft
+    mode: "700"
+
 - name: Crontab job push backup externally
   ansible.builtin.cron:
     name: "Push Backup External {{ mc_world_name }}"
@@ -40,6 +48,17 @@
     hour: "04"
     weekday: "{{ mc_backup_push_weekday }}"
     job: "/opt/paper/scr/backup_store_externally.sh"
+  when: mc_split_large_backups == false
+
+- name: Crontab job push backup externally for large files
+  ansible.builtin.cron:
+    name: "Push Backup External {{ mc_world_name }}"
+    user: minecraft
+    minute: "15"
+    hour: "04"
+    weekday: "{{ mc_backup_push_weekday }}"
+    job: "/opt/paper/scr/backup_store_externally_chunks.sh"
+  when: mc_split_large_backups == true
 
     # - name: Create /etc/motd about Backups
     #   copy:

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+local_backup_dir=/opt/paper/backup
+external_backup_dir_base=/opt/external_backups 
+external_backup_dir_path="Userstore/Minecraft King/Minecraft Backups" 
+mc_world_name="{{ mc_world_name }}"
+
+cd "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
+# <----- remove!! # rm "backup-${mc_world_name}_old"* "${mc_world_name}_old"* 
+for latest_file in $( ls "backup-${mc_world_name}_latest"* "${mc_world_name}_latest"*) ; do
+	echo mv "$latest_file" $( echo $latest_file | sed --expression s/latest/old/ )
+  done
+
+cd $local_backup_dir
+
+latest_backup=$( ls -tr backup-${mc_world_name}*.tgz | tail -n 1) 
+echo Splitting $latest_backup
+split -b 300M $latest_backup ${mc_world_name}_latest.tgz.
+for split_file in $( ls ${mc_world_name}_latest.tgz.?? )
+do
+	date; echo "Copy $split_file to external storage"
+	cp "$split_file" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
+	date; echo "Waiting 120 Seconds."
+	sleep 120
+	echo "Syncing drive."
+	sync $external_backup_dir_base
+	date; echo "Waiting 10 Minutes."
+	sleep 600
+	# <---- remove! # rm "$split_file"
+done
+
+sleep 30
+sync ${external_backup_dir_base}

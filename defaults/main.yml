@@ -3,3 +3,4 @@
 mc_version: 1.19.2
 mc_secure_profile: True
 mc_seed: ""
+mc_split_large_backups: false
