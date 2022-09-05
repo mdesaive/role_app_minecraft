@@ -5,8 +5,13 @@ external_backup_dir_base=/opt/external_backups
 external_backup_dir_path="Userstore/Minecraft King/Minecraft Backups" 
 mc_world_name="{{ mc_world_name }}"
 
+date; echo Moving old to older.
 mv -f "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_old.tgz" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_older.tgz"
+date; echo Moving latest to old.
 mv -f "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.tgz" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_old.tgz"
+date; echo Pushing local backup externally.
 cp "$local_backup_dir/$(ls -tr $local_backup_dir | tail -n 1 )" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.tgz"
+date; echo Sleeping
 sleep 30
+date; echo Syncing
 sync ${external_backup_dir_base}

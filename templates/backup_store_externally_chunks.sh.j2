@@ -6,11 +6,13 @@ external_backup_dir_path="Userstore/Minecraft King/Minecraft Backups"
 mc_world_name="{{ mc_world_name }}"
 
 cd "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
+# echo deleting older files
 # <----- remove!! # rm "backup-${mc_world_name}_old"* "${mc_world_name}_older."* 
+date; echo Moving old to older.
 for old_file in $( ls "backup-${mc_world_name}_old."* "${mc_world_name}_old."*) ; do
 	echo mv "$latest_file" $( echo $latest_file | sed --expression s/old/older/ )
   done
-
+date; echo Moving latest to old.
 for latest_file in $( ls "backup-${mc_world_name}_latest."* "${mc_world_name}_latest."*) ; do
 	echo mv "$latest_file" $( echo $latest_file | sed --expression s/latest/old/ )
   done
@@ -18,7 +20,7 @@ for latest_file in $( ls "backup-${mc_world_name}_latest."* "${mc_world_name}_la
 cd $local_backup_dir
 
 latest_backup=$( ls -tr backup-${mc_world_name}*.tgz | tail -n 1) 
-echo Splitting $latest_backup
+date; echo Splitting $latest_backup
 split -b 300M $latest_backup ${mc_world_name}_latest.tgz.
 for split_file in $( ls ${mc_world_name}_latest.tgz.?? )
 do
@@ -30,6 +32,7 @@ do
 	sync $external_backup_dir_base
 	date; echo "Waiting 10 Minutes."
 	sleep 600
+  # echo deleting old split files
 	# <---- remove! # rm "$split_file"
 done
 
