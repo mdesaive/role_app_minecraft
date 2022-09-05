@@ -25,5 +25,5 @@
     name: "Backup {{ mc_world_name }}"
     user: minecraft
     minute: "45"
-    hour: "05"
+    hour: "03"
     job: "/opt/paper/scr/minecraft_backup_{{ mc_world_name }}.sh"

@@ -37,7 +37,7 @@
     name: "Push Backup External {{ mc_world_name }}"
     user: minecraft
     minute: "15"
-    hour: "06"
+    hour: "04"
     weekday: "{{ mc_backup_push_weekday }}"
     job: "/opt/paper/scr/backup_store_externally.sh"
 
