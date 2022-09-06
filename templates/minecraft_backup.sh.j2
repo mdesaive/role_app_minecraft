@@ -20,4 +20,6 @@ tar -cz $game_path/{{ mc_world_name }}* -f  $backup_path/$folder_name.tgz
 
 sleep 5
 screen -R mc-{{ mc_world_name }} -X stuff "save-on $(printf '\r')"
+
+md5sum $backup_path/$folder_name.tgz > $backup_path/$folder_name.md5
 screen -R mc-{{ mc_world_name }} -X stuff "say Backup complete. $(printf '\r')"

@@ -1,4 +1,5 @@
-mc_paperspigot_file: paper-1.19.2-132.jar
+# last known working mc_paperspigot_file: paper-1.19.2-132.jar
+mc_paperspigot_file: paper-1.19.2-138.jar
 mc_plugins:
     SkinsRestorer.jar: SkinsRestorer-14.2.3-2022-08-06.jar
     ViaBackwards.jar: ViaBackwards-4.4.2-2022-08-02.jar

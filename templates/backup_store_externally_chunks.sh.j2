@@ -6,15 +6,25 @@ external_backup_dir_path="Userstore/Minecraft King/Minecraft Backups"
 mc_world_name="{{ mc_world_name }}"
 
 cd "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
-# echo deleting older files
-# <----- remove!! # rm "backup-${mc_world_name}_old"* "${mc_world_name}_older."* 
-date; echo Moving old to older.
+echo deleting oldest files
+rm "backup-${mc_world_name}_oldest."* "${mc_world_name}_oldest."* 
+date; echo Moving old to oldest.
 for old_file in $( ls "backup-${mc_world_name}_old."* "${mc_world_name}_old."*) ; do
-	echo mv "$latest_file" $( echo $latest_file | sed --expression s/old/older/ )
-  done
+	date; echo "Moving $old_file" to $( echo $old_file | sed --expression s/old/oldest/ )
+	mv "$old_file" $( echo $old_file | sed --expression s/old/oldest/ )
+done
+
 date; echo Moving latest to old.
 for latest_file in $( ls "backup-${mc_world_name}_latest."* "${mc_world_name}_latest."*) ; do
-	echo mv "$latest_file" $( echo $latest_file | sed --expression s/latest/old/ )
+	date; echo "Moving $latest_file" to $( echo $latest_file | sed --expression s/latest/old/ )
+	mv "$latest_file" "$( echo $latest_file | sed --expression s/latest/old/ )"
+	echo "sleep 10 s"
+	sleep 10
+	echo "Syncing drive."
+	sync $external_backup_dir_base
+	echo "Waiting 10 seconds."
+	sleep 10
+
   done
 
 cd $local_backup_dir
@@ -32,8 +42,8 @@ do
 	sync $external_backup_dir_base
 	date; echo "Waiting 10 Minutes."
 	sleep 600
-  # echo deleting old split files
-	# <---- remove! # rm "$split_file"
+  echo deleting old split files
+	rm "$split_file"
 done
 
 sleep 30
