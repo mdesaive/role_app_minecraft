@@ -9,9 +9,20 @@ date; echo Moving old to older.
 mv -f "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_old.tgz" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_older.tgz"
 date; echo Moving latest to old.
 mv -f "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.tgz" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_old.tgz"
-date; echo Pushing local backup externally.
-cp "$local_backup_dir/$(ls -tr $local_backup_dir | tail -n 1 )" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.tgz"
+last_backup="$local_backup_dir/$(ls -tr $local_backup_dir | tail -n 1 )"
+last_md5="$( echo ${last_backup} | sed --expression s/.tgz/.md5 )"
+date; echo Creating md5sum.
+md5sum "${last_backup}" > "${last_md5}"
+date; echo Pushing local backup "${local_backup} externally.
+cp "${last_backup}" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.tgz"
 date; echo Sleeping
 sleep 30
 date; echo Syncing
 sync ${external_backup_dir_base}
+cp "${last_md5}" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.md5"
+date; echo Sleeping
+sleep 30
+date; echo Syncing
+sync ${external_backup_dir_base}
+date; echo Creating md5sum of copied file.
+md5sum "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.tgz" > "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name/${mc_world_name}_latest.md5.after_copy"

@@ -5,34 +5,39 @@ external_backup_dir_base=/opt/external_backups
 external_backup_dir_path="Userstore/Minecraft King/Minecraft Backups" 
 mc_world_name="{{ mc_world_name }}"
 
-cd "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
+cd "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name" || exit
 echo deleting oldest files
-rm "backup-${mc_world_name}_oldest."* "${mc_world_name}_oldest."* 
+rm "split_${mc_world_name}_oldest."*
 date; echo Moving old to oldest.
-for old_file in $( ls "backup-${mc_world_name}_old."* "${mc_world_name}_old."*) ; do
-	date; echo "Moving $old_file" to $( echo $old_file | sed --expression s/old/oldest/ )
-	mv "$old_file" $( echo $old_file | sed --expression s/old/oldest/ )
-done
-
-date; echo Moving latest to old.
-for latest_file in $( ls "backup-${mc_world_name}_latest."* "${mc_world_name}_latest."*) ; do
-	date; echo "Moving $latest_file" to $( echo $latest_file | sed --expression s/latest/old/ )
-	mv "$latest_file" "$( echo $latest_file | sed --expression s/latest/old/ )"
+for old_file in $( ls "split_${mc_world_name}_old."* ) ; do
+	date; echo "Moving $old_file" to $( echo "$old_file" | sed --expression s/old/oldest/ )
+	mv "$old_file" $( echo "$old_file" | sed --expression s/old/oldest/ )
 	echo "sleep 10 s"
 	sleep 10
 	echo "Syncing drive."
 	sync $external_backup_dir_base
 	echo "Waiting 10 seconds."
 	sleep 10
+done
 
-  done
+date; echo Moving latest to old.
+for latest_file in $( ls "split_${mc_world_name}_latest."* ) ; do
+	date; echo "Moving $latest_file" to $( echo "$latest_file" | sed --expression s/latest/old/ )
+	mv "$latest_file" "$( echo "$latest_file" | sed --expression s/latest/old/ )"
+	echo "sleep 10 s"
+	sleep 10
+	echo "Syncing drive."
+	sync $external_backup_dir_base
+	echo "Waiting 10 seconds."
+	sleep 10
+done
 
+## In local filesystem
 cd $local_backup_dir
-
 latest_backup=$( ls -tr backup-${mc_world_name}*.tgz | tail -n 1) 
 date; echo Splitting $latest_backup
-split -b 300M $latest_backup ${mc_world_name}_latest.tgz.
-for split_file in $( ls ${mc_world_name}_latest.tgz.?? )
+split -b 300M $latest_backup split_${mc_world_name}_latest.tgz.
+for split_file in $( ls "split_${mc_world_name}_latest.tgz.??" )
 do
 	date; echo "Copy $split_file to external storage"
 	cp "$split_file" "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
@@ -43,8 +48,20 @@ do
 	date; echo "Waiting 10 Minutes."
 	sleep 600
   echo deleting old split files
-	rm "$split_file"
+  rm "$split_file"
 done
+cp ${mc_world_name}_latest.md5 "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
+sleep 120
+date; echo "Waiting 120 Seconds."
+sleep 120
+echo "Syncing drive."
+sync $external_backup_dir_base
+date; echo "Waiting 10 Minutes."
+sleep 600
+
+## In external filesystem
+cd "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
+cat $( find . -name "split_${mc_world_name}_latest.tgz.??" | sort ) | md5sum > split_${mc_world_name}_latest.md5.after_copy
 
 sleep 30
 sync ${external_backup_dir_base}
