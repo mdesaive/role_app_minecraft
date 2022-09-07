@@ -50,7 +50,8 @@ do
   echo deleting old split files
   rm "$split_file"
 done
-cp ${mc_world_name}_latest.md5 "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
+latest_md5=$( echo $latest_backup | sed --expression 's,tgz$,md5,' )
+cp ${latest_md5} "$external_backup_dir_base/$external_backup_dir_path/$mc_world_name"
 sleep 120
 date; echo "Waiting 120 Seconds."
 sleep 120
