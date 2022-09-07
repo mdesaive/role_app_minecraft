@@ -60,6 +60,14 @@
     job: "/opt/paper/scr/backup_store_externally_chunks.sh"
   when: mc_split_large_backups == true
 
+- name: Check_MK check for MD5 Sums
+  template:
+    src: check_backup_md5.py.j2
+    dest: /usr/lib/check_mk_agent/local/check_backup_md5.py
+    owner: root
+    group: root
+    mode: "777"
+
     # - name: Create /etc/motd about Backups
     #   copy:
     #     src: motd

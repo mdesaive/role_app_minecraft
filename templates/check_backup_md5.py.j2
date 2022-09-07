@@ -1,0 +1,43 @@
+#!/usr/bin/python3
+
+import pprint
+
+mc_world_name='{{ mc_world_name}}'
+backupdir = "/opt/external_backups/Userstore/Minecraft King/Minecraft Backups/mc-king-01-ng/"
+file_base = f'split_{mc_world_name}'
+file_generations = ['latest','old','oldest']
+result = {}
+
+for generation in file_generations:
+    result[generation]={'state':'0', 'comment':''} 
+    filename_orig=f'{backupdir}{file_base}_{generation}.md5'
+    filename_after_copy=f'{backupdir}{file_base}_{generation}.md5.after_copy'
+    try:
+        file_orig=open(filename_orig)
+    except:
+        result[generation]={'state':'2', 'comment':'md5 orig missing'}
+        continue
+    try:
+        file_after_copy=open(filename_after_copy)
+    except:
+        result[generation]={'state':'2', 'comment':'md5 after copy missing'}
+        continue
+
+    try:
+        md5sum_orig = file_orig.readline()
+    except:
+        result[generation]={'state':'2', 'comment':'md5 orig empty'}
+        continue
+
+    try:
+        md5sum_after_copy = file_after_copy.readline()
+    except:
+        result[generation]={'state':'2', 'comment':'md5 after copy empty'}
+        continue
+
+    if md5sum_orig != md5sum_after_copy:
+        result[generation]={'state':'2', 'comment':'md5 sums differ'}
+
+#pprint.pprint(result)
+for generation in file_generations:
+    print(f'{result[generation]["state"]} backup_{generation} - \"{result[generation]["comment"]}\"')
