@@ -4,9 +4,9 @@ backup_path="/opt/paper/backup/"
 tmux_session="mc"
 folder_name="backup-{{ mc_world_name }}-$(date +%Y%m%d_%H%M-%S)"
 
-screen -R mc-{{ mc_world_name }} -X stuff "say Performing backup $(printf '\r')"
-screen -R mc-{{ mc_world_name }} -X stuff "save-off $(printf '\r')"
-screen -R mc-{{ mc_world_name }} -X stuff "save-all $(printf '\r')"
+screen -R minecraft -X stuff "say Performing backup $(printf '\r')"
+screen -R minecraft -X stuff "save-off $(printf '\r')"
+screen -R minecraft -X stuff "save-all $(printf '\r')"
 sleep 5
 echo "Copying the files..."
 tar -cz $game_path/{{ mc_world_name }}* -f  $backup_path/$folder_name.tgz
@@ -19,7 +19,7 @@ tar -cz $game_path/{{ mc_world_name }}* -f  $backup_path/$folder_name.tgz
 # fi
 
 sleep 5
-screen -R mc-{{ mc_world_name }} -X stuff "save-on $(printf '\r')"
+screen -R minecraft -X stuff "save-on $(printf '\r')"
 
 md5sum $backup_path/$folder_name.tgz > $backup_path/$folder_name.md5
-screen -R mc-{{ mc_world_name }} -X stuff "say Backup complete. $(printf '\r')"
+screen -R minecraft -X stuff "say Backup complete. $(printf '\r')"
