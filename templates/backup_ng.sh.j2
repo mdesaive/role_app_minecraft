@@ -1,0 +1,35 @@
+#!/bin/bash
+source_base="/opt/paper/run/{{ mc_world_name }}"
+dest_base_nfs="/opt/paper/backup_nfs/{{ mc_world_name }}"
+dest_base_local="/opt/paper/backup_local"
+tmux_session="mc"
+
+# Where to store today's backup
+backup_dest_nfs="$dest_base_nfs/$(date +%Y-%m-%d)"
+backup_dest_local="$dest_base_local/$(date +%Y-%m-%d)"
+# Where to find yesterday's backup
+backup_yesterday_nfs="$dest_base_nfs/$(date -d yesterday +%Y-%m-%d)/"
+backup_yesterday_local="$dest_base_local/$(date -d yesterday +%Y-%m-%d)/"
+
+# Use yesterday's backup as the incremental base if it exists
+if [ -d "$backup_yesterday_nfs" ]
+then
+    rsync_opts_nfs="--link-dest $backup_yesterday_nfs"
+fi
+
+# Use yesterday's backup as the incremental base if it exists
+if [ -d "$backup_yesterday_local" ]
+then
+    rsync_opts_local="--link-dest $backup_yesterday_local"
+fi
+
+screen -R minecraft -X stuff "say Performing backup $(printf '\r')"
+screen -R minecraft -X stuff "save-off $(printf '\r')"
+screen -R minecraft -X stuff "save-all $(printf '\r')"
+sleep 5
+rsync -av $rsync_opts_nfs "$source_base" "${source_base}_nether" "${source_base}_the_end" "${backup_dest_nfs}/"
+sleep 5
+rsync -av $rsync_opts_local "$source_base" "${source_base}_nether" "${source_base}_the_end" "${backup_dest_local}/"
+sleep 5
+screen -R minecraft -X stuff "save-on $(printf '\r')"
+screen -R minecraft -X stuff "say Backup complete. $(printf '\r')"

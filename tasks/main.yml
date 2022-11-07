@@ -39,6 +39,3 @@
 
 - name: Setup Local Backups
   include: 04-local-backups.yml
-
-- name: Setup External Backups
-  include: 05-external-backups.yml
