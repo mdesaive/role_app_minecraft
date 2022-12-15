@@ -1,4 +1,3 @@
-
 - name: Prepare plugin directory
   file:
     path: /opt/paper/run/plugins/
@@ -6,7 +5,6 @@
     owner: minecraft
     group: minecraft
     mode: '755'
-
 
 - name: Prepare floodgate plugin directory
   file:

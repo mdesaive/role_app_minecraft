@@ -6,4 +6,5 @@ mc_plugins:
     Chunky.jar: Chunky-1.2.217-2022-06-26.jar
     Dynmap.jar: Dynmap-3.4-beta-5-spigot-20220725.jar
     floodgate-spigot.jar: floodgate-spigot-Build-066-2022-06-08.jar
+    # serverlogin.jar: serverlogin-2.1-2019-12-14.jar
 
