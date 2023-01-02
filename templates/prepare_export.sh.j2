@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+backups_local="/opt/backups_local"
+
+ls -ltr ${backups_local}/export/
+read -p "Should I delete all files in export directory? [y] to delete! " remove_old
+if [ $remove_old == "y" ]; then
+      rm -vri ${backups_local}/export/*
+fi
+ls -ltr ${backups_local}/minecraft/
+read -p "Which backup should be exported? " backup_version
+cd ${backups_local}/minecraft/$backup_version/
+tar -czvf ../../export/$(hostname)-$backup_version.tgz .
+

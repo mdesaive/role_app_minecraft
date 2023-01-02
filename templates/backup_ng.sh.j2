@@ -1,20 +1,21 @@
 #!/bin/bash
 source_base="/opt/paper/run/{{ mc_world_name }}"
-dest_base_efs="/opt/backups_efs/{{ mc_world_name }}"
-dest_base_local="/opt/paper/backup_local"
+dest_base_net="/opt/backups_net/{{ inventory_hostname }}/minecraft"
+dest_base_local="/opt/backups_local/minecraft"
+
 tmux_session="mc"
 
 # Where to store today's backup
-backup_dest_efs="$dest_base_efs/$(date +%Y-%m-%d-%H:%M-%S)"
+backup_dest_net="$dest_base_net/$(date +%Y-%m-%d-%H:%M-%S)"
 backup_dest_local="$dest_base_local/$(date +%Y-%m-%d-%H:%M-%S)"
 # Where to find yesterday's backup
-backup_last_efs="$( ls -1tr $dest_base_efs  | tail -n 1 )"
+backup_last_net="$( ls -1tr $dest_base_net  | tail -n 1 )"
 backup_last_local="$( ls -1tr $dest_base_local | tail -n 1)"
 
 # # Use yesterday's backup as the incremental base if it exists
-if [ ! -z "$backup_last_efs" ]
+if [ ! -z "$backup_last_net" ]
 then
-    rsync_opts_efs="--link-dest $dest_base_efs/$backup_last_efs"
+    rsync_opts_net="--link-dest $dest_base_net/$backup_last_net"
 fi
 
 # Use yesterday's backup as the incremental base if it exists
@@ -23,14 +24,19 @@ then
     rsync_opts_local="--link-dest $dest_base_local/$backup_last_local"
 fi
 
-screen -R minecraft -X stuff "say Performing backup $(printf '\r')"
-screen -R minecraft -X stuff "save-off $(printf '\r')"
-screen -R minecraft -X stuff "save-all $(printf '\r')"
+# screen -R minecraft -X stuff "say Performing backup $(printf '\r')"
+su -c "screen -R minecraft -X stuff \"say Performing backup $(printf '\r')\"" minecraft
+# screen -R minecraft -X stuff "save-off $(printf '\r')"
+su -c "screen -R minecraft -X stuff \"save-off $(printf '\r')\"" minecraft
+# screen -R minecraft -X stuff "save-all $(printf '\r')"
+su -c "screen -R minecraft -X stuff \"save-all $(printf '\r')\"" minecraft
 sleep 5
-rsync -av $rsync_opts_efs "$source_base" "${source_base}_nether" "${source_base}_the_end" "${backup_dest_efs}/"
+rsync -av $rsync_opts_net "$source_base" "${source_base}_nether" "${source_base}_the_end" "${backup_dest_net}/"
 sleep 5
 rsync -av $rsync_opts_local "$source_base" "${source_base}_nether" "${source_base}_the_end" "${backup_dest_local}/"
 sleep 5
-screen -R minecraft -X stuff "save-on $(printf '\r')"
-screen -R minecraft -X stuff "say Backup complete. $(printf '\r')"
+# screen -R minecraft -X stuff "save-on $(printf '\r')"
+su -c "screen -R minecraft -X stuff \"save-on $(printf '\r')\"" minecraft
+# screen -R minecraft -X stuff "say Backup complete. $(printf '\r')"
+su -c "screen -R minecraft -X stuff \"say Backup complete. $(printf '\r')\"" minecraft
 
