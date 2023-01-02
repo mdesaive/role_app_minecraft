@@ -1,36 +1,51 @@
 - name: Create Scripting Directory
   file:
-    path: /opt/paper/scr/
+    path: /root/scr/
     state: directory
-    owner: minecraft
-    group: minecraft
+    owner: root
+    group: root
 
-- name: Create Backup Directory
+- name: Create Local Backup Directory
   file:
-    path: /opt/paper/backup/
+    path: /opt/backups_local/minecraft/
     state: directory
-    owner: minecraft
-    group: minecraft
+    owner: root
+    group: root
+
+- debug:
+    var: inventory_hostname
+
+- debug:
+    var: ansible_hostname
+
+- name: Create Network Backup Directory
+  file:
+    path: "/opt/backups_net/{{ inventory_hostname }}/minecraft/"
+    state: directory
+    owner: root
+    group: root
 
 - name: Prepare Backup Script
   template:
     src: backup_ng.sh.j2
-    dest: /opt/paper/scr/backup_ng.sh
-    owner: minecraft
-    group: minecraft
+    dest: /root/scr/backup_ng.sh
+    owner: root
+    group: root
     mode: "700"
-
-- name: Create Backup Directory
-  file:
-    path: /opt/paper/backup_nfs/{{ mc_world_name }}
-    state: directory
-    owner: minecraft
-    group: minecraft
 
 - name: Crontab job for backup
   ansible.builtin.cron:
     name: "Backup {{ mc_world_name }}"
-    user: minecraft
-    minute: "45"
-    hour: "03"
-    job: "/opt/paper/scr/backup_ng.sh"
+    user: root
+    hour: "{{ mc_backup_hour }}"
+    minute: "{{ mc_backup_minute }}"
+    job: "/root/scr/backup_ng.sh"
+
+- name: Prepare Helper Script to Export Backups
+  template:
+    src: prepare_export.sh.j2
+    dest: /root/scr/prepare_export.sh
+    owner: root
+    group: root
+    mode: "700"
+
